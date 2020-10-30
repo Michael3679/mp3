@@ -82,7 +82,11 @@ public class ComputerStateTest {
     public void disconnect() throws Exception {
         CLICommandInvoker command = new CLICommandInvoker(j, "disconnect-node");
 
-        Slave slave = j.createOnlineSlave();
+        disableOnlineSlave(command);
+    }
+
+	private void disableOnlineSlave(CLICommandInvoker command) throws Exception {
+		Slave slave = j.createOnlineSlave();
         assertTrue(slave.toComputer().isOnline());
 
         Result result = command.authorizedTo(Jenkins.READ, Computer.DISCONNECT)
@@ -95,24 +99,12 @@ public class ComputerStateTest {
         UserCause cause = (UserCause) slave.toComputer().getOfflineCause();
         assertThat(cause.toString(), endsWith("Custom cause message"));
         assertThat(cause.getUser(), equalTo(command.user()));
-    }
+	}
 
     @Test
     public void offline() throws Exception {
         CLICommandInvoker command = new CLICommandInvoker(j, "offline-node");
 
-        Slave slave = j.createOnlineSlave();
-        assertTrue(slave.toComputer().isOnline());
-
-        Result result = command.authorizedTo(Jenkins.READ, Computer.DISCONNECT)
-                .invokeWithArgs(slave.getNodeName(), "-m", "Custom cause message")
-        ;
-
-        assertThat(result, succeededSilently());
-        assertTrue(slave.toComputer().isOffline());
-
-        UserCause cause = (UserCause) slave.toComputer().getOfflineCause();
-        assertThat(cause.toString(), endsWith("Custom cause message"));
-        assertThat(cause.getUser(), equalTo(command.user()));
+        disableOnlineSlave(command);
     }
 }
