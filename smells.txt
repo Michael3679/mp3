@@ -3,3 +3,5 @@ smells.txt
 Q1: The smell is duplicated code, and the fix is to refactor it into a new method that can be used in place of the code block.
 
 Q3: The smell is feature envy, and the refactoring that could fix it would be to move it to the appropriate class.
+
+Q4: The way to eliminate the duplicated code is to create a for loop instead.
